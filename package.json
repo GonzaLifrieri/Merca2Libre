@@ -1,0 +1,27 @@
+{
+  "name": "merca2libre",
+  "version": "1.0.0",
+  "description": "Práctica de e-commerce",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GonzaLifrieri/Merca2Libre.git"
+  },
+  "keywords": [
+    "node",
+    "js"
+  ],
+  "author": "Taco's Co.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GonzaLifrieri/Merca2Libre/issues"
+  },
+  "homepage": "https://github.com/GonzaLifrieri/Merca2Libre#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
+}
