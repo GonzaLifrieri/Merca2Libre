@@ -1,6 +1,7 @@
 const express = require('express');
-var cors = require('cors');
-var bodyParser = require('body-parser');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const controladorUsuario = require('../controladores/controladorUsuario');
 
 //config de seguridad -- son todos middleware
 const app = express();
@@ -16,9 +17,7 @@ app.get('/usuario/crear', function(req, res){
 app.get('/usuario/:id/actualizar', function(req, res){
     console.log('Ruta para actualizar usuarios');
 });
-app.get('/usuarios/list', function(req, res){
-    console.log('Ruta para crear usuarios');
-})
+app.get('/usuarios/list', controladorUsuario.usuariosList);
 
 
 //seteamos el puerto en el cual va a escuchar los pedidos la aplicación
