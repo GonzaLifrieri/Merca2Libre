@@ -14,13 +14,13 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-app.post('/usuario/crear', controladorUsuario.nuevoUsuario);
-
-
-// app.get('/usuarios/list', function(req, res){
-//     console.log('Ruta para crear usuarios');
-// })
-
+app.get('/usuario/crear', function(req, res){
+    console.log('Ruta para crear usuarios');
+});
+app.get('/usuario/:id/actualizar', function(req, res){
+    console.log('Ruta para actualizar usuarios');
+});
+app.get('/usuarios/list', controladorUsuario.usuariosList);
 
 //seteamos el puerto en el cual va a escuchar los pedidos la aplicación
 var puerto = '8080';
