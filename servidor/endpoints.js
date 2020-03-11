@@ -1,6 +1,7 @@
 const express = require('express');
 var cors = require('cors');
 var bodyParser = require('body-parser');
+const controladorUsuario = require('../controladores/controladorUsuario');
 
 //config de seguridad -- son todos middleware
 const app = express();
@@ -13,9 +14,8 @@ app.use(bodyParser.json());
 app.get('/usuario/crear', function(req, res){
     console.log('Ruta para crear usuarios');
 });
-app.get('/usuario/:id/actualizar', function(req, res){
-    console.log('Ruta para actualizar usuarios');
-});
+app.put('/usuario/:id/actualizar', controladorUsuario.actualizarUsuario);
+
 app.get('/usuarios/list', function(req, res){
     console.log('Ruta para crear usuarios');
 })
