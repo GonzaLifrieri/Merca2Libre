@@ -11,7 +11,7 @@ var con = require('../connection');
           console.log("Hubo un error en obtener email");
           return res.status(400).send("Hubo un error en la obtencion del email");
         }
-        return result.lenght == 0
+        return result.length == 0
         
     })
 
