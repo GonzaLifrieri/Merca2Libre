@@ -5,11 +5,14 @@ const controladorUsuario = require('../controladores/controladorUsuario');
 const controladorTienda = require('../controladores/controladorTienda');
 
 //config de seguridad -- son todos middleware
-const app = express();
+var app = express();
+
 app.use(cors());
+
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+
 app.use(bodyParser.json());
 
 app.get('/usuario/crear', function(req, res){
