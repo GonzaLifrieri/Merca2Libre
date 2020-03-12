@@ -24,7 +24,7 @@ function nuevoUsuario(req, res){
 
 // Consulta de Usuarios
 function buscarUsuarios(req, res) {
-    var sql = "select * from usuario";
+    var sql = "SELECT * FROM usuario";
 
     // la funcion de callback se ejecuta una vez que se termine de ejecutar la consulta
     con.query(sql, function(error, resultado, fields) {
@@ -39,14 +39,6 @@ function buscarUsuarios(req, res) {
         res.send(JSON.stringify(response));
     });
 }
-
-module.exports = {
-    nuevoUsuario: nuevoUsuario,
-    buscarUsuarios: buscarUsuarios
-};
-
-
-
 
 // List usuarios
 function usuariosList (req, res){
@@ -65,6 +57,28 @@ function usuariosList (req, res){
     );
 }
 
+function tiendasList(req, res){
+    let user_id = req.params.id ? req.params.id : null;
+    if(!user_id) {
+        console.log(error);
+        res.status(500).send('Ocurrió un error al ejecutar la consulta. No se encontró el usuario. Por favor inténtelo más tarde.');
+    }
+    let stmt = `SELECT t.id, t.name FROM tienda as t LEFT JOIN usuario as u ON t.owner_id = u.id WHERE u.id = ?`;
+    con.query(stmt, [user_id], function(error, result){
+        if(error){
+            console.log(error);
+            res.status(500).send('Ocurrió un error al intentar ejecutar la consulta. Por favor inténtelo más tarde.');
+        }
+        let respuesta = {
+            tiendas : result,
+        }
+        res.json(respuesta);
+    });
+}
+
 module.exports = {
-usuariosList : usuariosList
+    nuevoUsuario: nuevoUsuario,
+    buscarUsuarios: buscarUsuarios,
+    usuariosList : usuariosList,
+    tiendasList,
 }

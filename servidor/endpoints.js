@@ -21,11 +21,14 @@ app.get('/usuario/crear', function(req, res){
 app.get('/usuario/:id/actualizar', function(req, res){
     console.log('Ruta para actualizar usuarios');
 });
+app.get('/usuario/:id/tiendas', controladorUsuario.tiendasList);
+
 app.get('/usuarios/list', controladorUsuario.usuariosList);
 
 app.get('/tienda/crear', controladorTienda.crear);
 
 app.get('/tienda/:id/editar', controladorTienda.editar);
+
 
 
 //seteamos el puerto en el cual va a escuchar los pedidos la aplicación
