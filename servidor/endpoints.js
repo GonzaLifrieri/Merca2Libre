@@ -18,10 +18,10 @@ app.use(bodyParser.json());
 app.get('/usuario/crear', function(req, res){
     console.log('Ruta para crear usuarios');
 });
-app.get('/usuario/:id/actualizar', function(req, res){
-    console.log('Ruta para actualizar usuarios');
-});
+
 app.get('/usuario/:id/tiendas', controladorUsuario.tiendasList);
+
+app.put('/usuario/:id/actualizar', controladorUsuario.actualizarUsuario);
 
 app.get('/usuarios/list', controladorUsuario.usuariosList);
 
