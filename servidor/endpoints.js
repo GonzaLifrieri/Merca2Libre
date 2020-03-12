@@ -18,6 +18,9 @@ app.use(bodyParser.json());
 app.get('/usuario/crear', function(req, res){
     console.log('Ruta para crear usuarios');
 });
+
+app.get('/usuario/:id/tiendas', controladorUsuario.tiendasList);
+
 app.put('/usuario/:id/actualizar', controladorUsuario.actualizarUsuario);
 
 app.get('/usuarios/list', controladorUsuario.usuariosList);
@@ -25,6 +28,7 @@ app.get('/usuarios/list', controladorUsuario.usuariosList);
 app.get('/tienda/crear', controladorTienda.crear);
 
 app.get('/tienda/:id/editar', controladorTienda.editar);
+
 
 
 //seteamos el puerto en el cual va a escuchar los pedidos la aplicación
