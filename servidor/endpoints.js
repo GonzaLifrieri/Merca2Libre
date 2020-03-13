@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const controladorUsuario = require('../controladores/controladorUsuario');
 const controladorTienda = require('../controladores/controladorTienda');
+const controladorProducto = require('../controladores/controladorProducto');
 
 //config de seguridad -- son todos middleware
 var app = express();
@@ -15,16 +16,17 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-app.get('/usuario/crear', function(req, res){
-    console.log('Ruta para crear usuarios');
-});
-app.put('/usuario/:id/actualizar', controladorUsuario.actualizarUsuario);
+// app.post('/usuario/crear', controladorUsuario.nuevoUsuario);
 
-app.get('/usuarios/list', controladorUsuario.usuariosList);
+// app.put('/usuario/:id/actualizar', controladorUsuario.actualizarUsuario);
+
+// app.get('/usuarios/list', controladorUsuario.usuariosList);
 
 app.get('/tienda/crear', controladorTienda.crear);
 
 app.get('/tienda/:id/editar', controladorTienda.editar);
+
+app.post('/tienda/nuevoProducto', controladorProducto.crearProducto);
 
 
 //seteamos el puerto en el cual va a escuchar los pedidos la aplicación
