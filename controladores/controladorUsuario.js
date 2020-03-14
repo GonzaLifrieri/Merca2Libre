@@ -4,9 +4,14 @@ var con = require('../connection');
 
 // Alta de Usuario
 function nuevoUsuario(req, res){
+    var sql = '';
     var nombre = req.body.nombre;
     var email = req.body.email;
-    var sql = "insert usuario (name, email) values ('" + nombre + "','" + email + "')";
+    const esvalidoEmail = checkEmail(email);
+    console.log(esvalidoEmail)
+    if(esvalidoEmail){
+        sql = "insert usuario (name, email) values ('" + nombre + "','" + email + "')";
+    }
 
     con.query(sql, function(error, resultado, fields){
         if(error){

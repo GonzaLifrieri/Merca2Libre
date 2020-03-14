@@ -22,15 +22,13 @@ app.get('/usuario/:id/tiendas', controladorUsuario.tiendasList);
 
 app.put('/usuario/:id/actualizar', controladorUsuario.actualizarUsuario);
 
-// app.put('/usuario/:id/actualizar', controladorUsuario.actualizarUsuario);
-
-// app.get('/usuarios/list', controladorUsuario.usuariosList);
+app.get('/usuarios/list', controladorUsuario.usuariosList);
 
 app.get('/tienda/crear', controladorTienda.crear);
 
 app.get('/tienda/:id/editar', controladorTienda.editar);
 
-app.post('/tienda/nuevoProducto', controladorProducto.crearProducto);
+// app.post('/tienda/nuevoProducto', controladorProducto.crearProducto);
 
 
 
