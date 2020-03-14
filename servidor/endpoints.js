@@ -16,7 +16,11 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-// app.post('/usuario/crear', controladorUsuario.nuevoUsuario);
+app.post('/usuario/crear', controladorUsuario.nuevoUsuario);
+
+app.get('/usuario/:id/tiendas', controladorUsuario.tiendasList);
+
+app.put('/usuario/:id/actualizar', controladorUsuario.actualizarUsuario);
 
 // app.put('/usuario/:id/actualizar', controladorUsuario.actualizarUsuario);
 
@@ -27,6 +31,7 @@ app.get('/tienda/crear', controladorTienda.crear);
 app.get('/tienda/:id/editar', controladorTienda.editar);
 
 app.post('/tienda/nuevoProducto', controladorProducto.crearProducto);
+
 
 
 //seteamos el puerto en el cual va a escuchar los pedidos la aplicación
