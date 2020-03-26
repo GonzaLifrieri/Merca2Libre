@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const controladorUsuario = require('../controladores/controladorUsuario');
 const controladorTienda = require('../controladores/controladorTienda');
+const controladorProducto = require('../controladores/controladorProducto');
 
 //config de seguridad -- son todos middleware
 var app = express();
@@ -29,7 +30,7 @@ app.get('/tienda/crear', controladorTienda.crear);
 
 app.get('/tienda/:id/editar', controladorTienda.editar);
 
-
+app.put('/producto/:id/actualizar', controladorProducto.actualizarProducto);
 
 //seteamos el puerto en el cual va a escuchar los pedidos la aplicación
 var puerto = '8080';
