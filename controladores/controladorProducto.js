@@ -4,14 +4,14 @@ const con = require('../connection');
 
 function crearProducto(req, res){
     //Obtiene los datos del metodo POST dentro del objeto 'body'
-    let tienda_id = req.body.tienda_id;
     let descripcion = req.body.descripcion;
     let precio = req.body.precio;
     let stock = req.body.stock;
-    let categoria = req.body.categoria;
+    let categoria_id = req.body.categoria_id;
+    let tienda_id = req.body.tienda_id;
 
 
-    let stmt = `INSERT INTO producto (tienda_id, description, price, stock, categoria) VALUES ("${tienda_id}", "${descripcion}", "${precio}", "${stock}", "${categoria}")`;
+    let stmt = `INSERT INTO producto (description, price, stock, categoria_id, tienda_id) VALUES ("${descripcion}", "${precio}", "${stock}", "${categoria_id}", "${tienda_id}")`;
     con.query(stmt, function(error, result){
         if (error) {
             console.log('Error al crear nueva tienda. ' + error);
