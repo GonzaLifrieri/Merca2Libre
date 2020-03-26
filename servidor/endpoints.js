@@ -24,6 +24,8 @@ app.get('/usuario/:id/tiendas', controladorUsuario.tiendasList);
 
 app.put('/usuario/:id/actualizar', controladorUsuario.actualizarUsuario);
 
+app.get('/usuario/:id/compras', controladorUsuario.comprasUsuario);
+
 app.get('/usuarios/list', controladorUsuario.usuariosList);
 
 app.get('/tienda/crear', controladorTienda.crear);

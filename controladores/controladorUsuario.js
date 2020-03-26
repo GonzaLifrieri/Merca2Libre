@@ -123,10 +123,26 @@ function actualizarUsuario(req,res){
     })
 }
 
+function comprasUsuario(req, res){
+    const id = req.params.id;
+    let stmt = `SELECT p.description, p.price FROM compra AS c LEFT JOIN usuario AS u ON c.user_id = u.id LEFT JOIN producto_x_compra AS pxc ON c.id = pxc.purchase_id LEFT JOIN producto AS p ON pxc.product_id = p.id WHERE u.id = ?`
+    con.query(stmt, [id], function(error, result){
+        if(error){
+            console.log('Ocurrió un error al buscar las compras del usuario'+id+'. Error: '+ error);
+            res.status(400).send('Ocurrió un error al mostrar las compras. Por favor inténtelo nuevamente más tarde');
+        }
+        let respuesta = {
+            compras : result,
+        }
+        res.json(respuesta);
+    });
+}
+
 module.exports = {
     nuevoUsuario: nuevoUsuario,
     buscarUsuarios: buscarUsuarios,
     usuariosList : usuariosList,
     actualizarUsuario,
     tiendasList,
+    comprasUsuario,
 }
