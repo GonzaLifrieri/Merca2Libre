@@ -7,25 +7,49 @@ function nuevoUsuario(req, res){
     var sql = '';
     var nombre = req.body.nombre;
     var email = req.body.email;
-    const esvalidoEmail = checkEmail(email);
-    console.log(esvalidoEmail)
-    if(esvalidoEmail){
-        sql = "insert usuario (name, email) values ('" + nombre + "','" + email + "')";
-    }
 
-    con.query(sql, function(error, resultado, fields){
-        if(error){
-            console.log("Hubo un error en la consulta", error.message);
-            return res.status(404).send("Hubo un error en la consulta");
+    checkEmail(email, (esvalidoEmail) => {
+
+        if(esvalidoEmail){
+            sql = "insert usuario (name, email) values ('" + nombre + "','" + email + "')";
+        
+            con.query(sql, function(error, resultado, fields){
+                if(error){
+                    console.log("Hubo un error en la consulta", error.message);
+                    return res.status(404).send("Hubo un error en la consulta");
+                }
+        
+                var response = {
+                    'nombres': resultado
+                };
+        
+                res.send(JSON.stringify(response));
+            }); 
         }
-
-        var response = {
-            'nombres': resultado
-        };
-
-        res.send(JSON.stringify(response));
+        else{
+            res.send('El email ya existe');
+        }
     });
+    
+    // checkEmail(Email, Callback)
+    // checkEmail(‘email@mail.com’, ()=>{})
 }
+
+
+//Actualizar Usuario - Validar si ya existe el email
+function checkEmail(email, callback){
+    const sqlEmail = "SELECT email FROM usuario WHERE email=" + "\""+email+ "\"";
+
+    con.query(sqlEmail, function (err, result, fields) {
+       if (err){
+         console.log("Hubo un error en obtener email");
+         return res.status(400).send("Hubo un error en la obtencion del email");
+       }
+
+       return callback(result.length == 0)
+   })
+}
+
 
 // Consulta de Usuarios
 function buscarUsuarios(req, res) {
@@ -82,21 +106,7 @@ function tiendasList(req, res){
 }
 
 
-//Actualizar Usuario
- function checkEmail(email){
-     const sqlEmail = "SELECT email FROM usuario WHERE email=" + "\""+email+ "\"";
-     con.query(sqlEmail,function (err, result, fields) {
-        if (err){
-          console.log("Hubo un error en obtener email");
-          return res.status(400).send("Hubo un error en la obtencion del email");
-        }
-        return result.length == 0
-        
-    })
 
-     
-     
- }
 function actualizarUsuario(req,res){
     var sql = " ";
     const email = req.body.email;

@@ -28,8 +28,9 @@ app.get('/tienda/crear', controladorTienda.crear);
 
 app.get('/tienda/:id/editar', controladorTienda.editar);
 
-// app.post('/tienda/nuevoProducto', controladorProducto.crearProducto);
+app.post('/tienda/nuevoProducto', controladorProducto.crearProducto);
 
+app.put('/producto/:id/actualizar', controladorProducto.actualizarProducto);
 
 
 //seteamos el puerto en el cual va a escuchar los pedidos la aplicación
