@@ -4,27 +4,56 @@ var con = require('../connection');
 
 // Alta de Usuario
 function nuevoUsuario(req, res){
+    var sql = '';
     var nombre = req.body.nombre;
     var email = req.body.email;
-    var sql = "insert usuario (name, email) values ('" + nombre + "','" + email + "')";
 
-    con.query(sql, function(error, resultado, fields){
-        if(error){
-            console.log("Hubo un error en la consulta", error.message);
-            return res.status(404).send("Hubo un error en la consulta");
+    checkEmail(email, (esvalidoEmail) => {
+
+        if(esvalidoEmail){
+            sql = "insert usuario (name, email) values ('" + nombre + "','" + email + "')";
+        
+            con.query(sql, function(error, resultado, fields){
+                if(error){
+                    console.log("Hubo un error en la consulta", error.message);
+                    return res.status(404).send("Hubo un error en la consulta");
+                }
+        
+                var response = {
+                    'nombres': resultado
+                };
+        
+                res.send(JSON.stringify(response));
+            }); 
         }
-
-        var response = {
-            'nombres': resultado
-        };
-
-        res.send(JSON.stringify(response));
+        else{
+            res.send('El email ya existe');
+        }
     });
+    
+    // checkEmail(Email, Callback)
+    // checkEmail(‘email@mail.com’, ()=>{})
 }
+
+
+//Actualizar Usuario - Validar si ya existe el email
+function checkEmail(email, callback){
+    const sqlEmail = "SELECT email FROM usuario WHERE email=" + "\""+email+ "\"";
+
+    con.query(sqlEmail, function (err, result, fields) {
+       if (err){
+         console.log("Hubo un error en obtener email");
+         return res.status(400).send("Hubo un error en la obtencion del email");
+       }
+
+       return callback(result.length == 0)
+   })
+}
+
 
 // Consulta de Usuarios
 function buscarUsuarios(req, res) {
-    var sql = "select * from usuario";
+    var sql = "SELECT * FROM usuario";
 
     // la funcion de callback se ejecuta una vez que se termine de ejecutar la consulta
     con.query(sql, function(error, resultado, fields) {
@@ -39,14 +68,6 @@ function buscarUsuarios(req, res) {
         res.send(JSON.stringify(response));
     });
 }
-
-module.exports = {
-    nuevoUsuario: nuevoUsuario,
-    buscarUsuarios: buscarUsuarios
-};
-
-
-
 
 // List usuarios
 function usuariosList (req, res){
@@ -65,22 +86,27 @@ function usuariosList (req, res){
     );
 }
 
-
-//Actualizar Usuario
- function checkEmail(email){
-     const sqlEmail = "SELECT email FROM usuario WHERE email=" + "\""+email+ "\"";
-     con.query(sqlEmail,function (err, result, fields) {
-        if (err){
-          console.log("Hubo un error en obtener email");
-          return res.status(400).send("Hubo un error en la obtencion del email");
+function tiendasList(req, res){
+    let user_id = req.params.id ? req.params.id : null;
+    if(!user_id) {
+        console.log(error);
+        res.status(500).send('Ocurrió un error al ejecutar la consulta. No se encontró el usuario. Por favor inténtelo más tarde.');
+    }
+    let stmt = `SELECT t.id, t.name FROM tienda as t LEFT JOIN usuario as u ON t.owner_id = u.id WHERE u.id = ?`;
+    con.query(stmt, [user_id], function(error, result){
+        if(error){
+            console.log(error);
+            res.status(500).send('Ocurrió un error al intentar ejecutar la consulta. Por favor inténtelo más tarde.');
         }
-        return result.length == 0
-        
-    })
+        let respuesta = {
+            tiendas : result,
+        }
+        res.json(respuesta);
+    });
+}
 
-     
-     
- }
+
+
 function actualizarUsuario(req,res){
     var sql = " ";
     const email = req.body.email;
@@ -134,8 +160,27 @@ function crearCompras(req,res){
 
 
 
+function comprasUsuario(req, res){
+    const id = req.params.id;
+    let stmt = `SELECT p.description, p.price FROM compra AS c LEFT JOIN usuario AS u ON c.user_id = u.id LEFT JOIN producto_x_compra AS pxc ON c.id = pxc.purchase_id LEFT JOIN producto AS p ON pxc.product_id = p.id WHERE u.id = ?`
+    con.query(stmt, [id], function(error, result){
+        if(error){
+            console.log('Ocurrió un error al buscar las compras del usuario'+id+'. Error: '+ error);
+            res.status(400).send('Ocurrió un error al mostrar las compras. Por favor inténtelo nuevamente más tarde');
+        }
+        let respuesta = {
+            compras : result,
+        }
+        res.json(respuesta);
+    });
+}
+
 module.exports = {
+    nuevoUsuario: nuevoUsuario,
+    buscarUsuarios: buscarUsuarios,
+    usuariosList : usuariosList,
     actualizarUsuario,
-    usuariosList,
-    crearCompras
+    crearCompras,
+    tiendasList,
+    comprasUsuario
 }

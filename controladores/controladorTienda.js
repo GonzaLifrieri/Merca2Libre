@@ -45,9 +45,8 @@ function editar(req, res){
             res.json(respuesta);
         });
     });
-
-
 }
+
 
 module.exports = {
     crear: crear,
