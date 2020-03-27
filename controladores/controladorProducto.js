@@ -1,6 +1,6 @@
 const con = require('../connection');
 
-// localhost:8080//tienda/nuevoProducto?tienda_id=Pedro&email=pedro@gmail.com
+// localhost:8080//tienda/nuevoProducto?descripcion=mesa&precio=50&stock=30&categoria_id=1&tienda_id=1
 
 function crearProducto(req, res){
     //Obtiene los datos del metodo POST dentro del objeto 'body'
@@ -17,17 +17,14 @@ function crearProducto(req, res){
             console.log('Error al crear nueva tienda. ' + error);
             res.status(400).send('Ocurrió un error al intentar crear el producto. Por favor inténtelo más tarde');
         }
-        con.query(stmt, function(error, result){
-            if(error){
-                console.log('Error al crear nueva tienda. ' + error);
-                res.status(400).send('Ocurrió un error al intentar crear la tienda. Por favor inténtelo más tarde'); 
-            };
-            respuesta = {
-                producto : result[0]
-            }
-            res.json(respuesta);
-        });
+
+        var respuesta = {
+            producto : result[0]
+        };
+
+        res.json(respuesta);
     });
+    
 }
 
 
