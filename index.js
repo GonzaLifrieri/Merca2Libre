@@ -1,6 +1,9 @@
-const conn = require('./connection');
+const configuracion = require('./servidor/configuracion');
 
-conn.query("SELECT SUM(2+5)", function(error, result){
-    console.log(result);
-    console.log(error);
+const app = configuracion.crearServidor();
+
+var puerto = '8080';
+
+app.listen(puerto, function () {
+  console.log( "Escuchando en el puerto " + puerto );
 });

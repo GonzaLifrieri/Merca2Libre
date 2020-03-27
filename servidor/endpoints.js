@@ -1,45 +1,30 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
 const controladorUsuario = require('../controladores/controladorUsuario');
 const controladorTienda = require('../controladores/controladorTienda');
 const controladorProducto = require('../controladores/controladorProducto');
 
-//config de seguridad -- son todos middleware
-var app = express();
+function agregarEndpoints(app){
 
-app.use(cors());
+  app.post('/usuario/crear', controladorUsuario.nuevoUsuario);
 
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
+  app.get('/usuario/:id/tiendas', controladorUsuario.tiendasList);
 
-app.use(bodyParser.json());
+  app.put('/usuario/:id/actualizar', controladorUsuario.actualizarUsuario);
 
-app.post('/usuario/crear', controladorUsuario.nuevoUsuario);
+  app.get('/usuario/:id/compras', controladorUsuario.comprasUsuario);
 
-app.get('/usuario/:id/tiendas', controladorUsuario.tiendasList);
+  app.get('/usuarios/list', controladorUsuario.usuariosList);
 
-app.put('/usuario/:id/actualizar', controladorUsuario.actualizarUsuario);
+  app.get('/tienda/crear', controladorTienda.crear);
 
-app.get('/usuario/:id/compras', controladorUsuario.comprasUsuario);
+  app.get('/tienda/:id/editar', controladorTienda.editar);
 
-app.get('/usuarios/list', controladorUsuario.usuariosList);
+  app.put('/compra/crear', controladorUsuario.crearCompras);
 
-app.get('/tienda/crear', controladorTienda.crear);
+  app.post('/tienda/nuevoProducto', controladorProducto.crearProducto);
 
-app.get('/tienda/:id/editar', controladorTienda.editar);
+  app.put('/producto/:id/actualizar', controladorProducto.actualizarProducto);
+}
 
-app.put('/compra/crear', controladorUsuario.crearCompras);
-
-app.post('/tienda/nuevoProducto', controladorProducto.crearProducto);
-
-app.put('/producto/:id/actualizar', controladorProducto.actualizarProducto);
-
-
-//seteamos el puerto en el cual va a escuchar los pedidos la aplicación
-var puerto = '8080';
-
-app.listen(puerto, function () {
-  console.log( "Escuchando en el puerto " + puerto );
-});
+module.exports = {
+  agregarEndpoints,
+}
