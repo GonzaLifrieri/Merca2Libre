@@ -28,7 +28,6 @@ function crearProducto(req, res){
 }
 
 
-
 function actualizarProducto (req, res){
     const idProducto = req.params.id ? req.params.id : null;
     if(!idProducto){
@@ -70,7 +69,30 @@ function actualizarProducto (req, res){
 
 }
 
+
+function consultarProductos(req, res){
+    let tienda_id = req.params.id;
+    
+    if(!tienda_id) {
+        console.log(error);
+        res.status(500).send('Ocurrió un error al ejecutar la consulta. No se encontró el usuario. Por favor inténtelo más tarde.');
+    }
+    let stmt = `SELECT P.* FROM producto P INNER JOIN tienda T ON P.tienda_id = T.id WHERE t.id = ?`;
+    con.query(stmt, [tienda_id], function(error, result){
+        if(error){
+            console.log(error);
+            res.status(500).send('Ocurrió un error al intentar ejecutar la consulta. Por favor inténtelo más tarde.');
+        }
+        let respuesta = {
+            tiendas : result,
+        }
+        res.json(respuesta);
+    });
+}
+
+
 module.exports = {
     crearProducto: crearProducto,
-    actualizarProducto: actualizarProducto
+    actualizarProducto: actualizarProducto,
+    consultarProductos: consultarProductos
 }

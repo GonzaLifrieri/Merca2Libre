@@ -23,6 +23,8 @@ function agregarEndpoints(app){
   app.post('/tienda/nuevoProducto', controladorProducto.crearProducto);
 
   app.put('/producto/:id/actualizar', controladorProducto.actualizarProducto);
+
+  app.get('/tienda/:id/productos', controladorProducto.consultarProductos);
 }
 
 module.exports = {

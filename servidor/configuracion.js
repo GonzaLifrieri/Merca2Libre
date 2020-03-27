@@ -22,4 +22,6 @@ function crearServidor(){
 
 
 
-module.exports = crearServidor;
+module.exports = {
+    crearServidor: crearServidor
+}
