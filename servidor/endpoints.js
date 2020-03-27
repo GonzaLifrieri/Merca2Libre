@@ -14,9 +14,9 @@ function agregarEndpoints(app){
 
   app.get('/usuarios/list', controladorUsuario.usuariosList);
 
-  app.get('/tienda/crear', controladorTienda.crear);
+  app.post('/tienda/crear', controladorTienda.crearTienda);
 
-  app.get('/tienda/:id/editar', controladorTienda.editar);
+  app.get('/tienda/:id/editar', controladorTienda.editarTienda);
 
   app.put('/compra/crear', controladorUsuario.crearCompras);
 

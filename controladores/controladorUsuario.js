@@ -8,7 +8,7 @@ function nuevoUsuario(req, res){
     var nombre = req.body.nombre;
     var email = req.body.email;
 
-    checkEmail(email, (esvalidoEmail) => {
+    checkEmail(email, null, (esvalidoEmail) => {
 
         if(esvalidoEmail){
             sql = "insert usuario (name, email) values ('" + nombre + "','" + email + "')";
@@ -37,8 +37,8 @@ function nuevoUsuario(req, res){
 
 
 //Actualizar Usuario - Validar si ya existe el email
-function checkEmail(email, callback){
-    const sqlEmail = "SELECT email FROM usuario WHERE email=" + "\""+email+ "\"";
+function checkEmail(email, id, callback){
+    const sqlEmail = "SELECT email FROM usuario WHERE email=" + "\""+email+ "\" AND id <> \""+ id+ "\"";
 
     con.query(sqlEmail, function (err, result, fields) {
        if (err){
@@ -48,25 +48,6 @@ function checkEmail(email, callback){
 
        return callback(result.length == 0)
    })
-}
-
-
-// Consulta de Usuarios
-function buscarUsuarios(req, res) {
-    var sql = "SELECT * FROM usuario";
-
-    // la funcion de callback se ejecuta una vez que se termine de ejecutar la consulta
-    con.query(sql, function(error, resultado, fields) {
-        if (error) {
-            console.log("Hubo un error en la consulta", error.message);
-            return res.status(404).send("Hubo un error en la consulta");
-        }
-        var response = {
-            'usuarios': resultado
-        };
-
-        res.send(JSON.stringify(response));
-    });
 }
 
 // List usuarios
@@ -110,33 +91,31 @@ function tiendasList(req, res){
 function actualizarUsuario(req,res){
     var sql = " ";
     const email = req.body.email;
-    const id = req.body.id;
+    const id = req.params.id;
     const name = req.body.name;
-    const esvalidoEmail = checkEmail(email)
-    if(name && email){
-        if(esvalidoEmail){
-            sql =  "UPDATE usuario SET email = '"+ email +"', name='" + name + "' WHERE id=" + id;
-        }
-    }
-    if(name){
-            sql =  "UPDATE usuario SET name = '"+ name + "' WHERE id=" + id;
-    }
-    if(email){
-        if(esvalidoEmail){
-            sql =  "UPDATE usuario SET email = '"+ email + "' WHERE id=" + id;
-        }
-    }
-    con.query(sql,function (err, result, fields) {
-        if (err){
-          console.log("Hubo un error en actualizar usuario. Nombre "+ name + " email: " + email + err)
-          return res.status(400).send("Hubo un error en la actualización del usuario");
-        }
-        let response = "Se ha actualizado el usuario"
-        res.json({response})
-        
+    if (email) {        
+        checkEmail(email, id, (esvalidoEmail) => {
 
-    })
+            if(esvalidoEmail){
+                sql =  "UPDATE usuario SET email = \""+ email +"\", name=\"" + name + "\" WHERE id = " + id;
+                console.log(sql);
+            
+                con.query(sql, function(error, resultado, fields){
+                    if(error){
+                        console.log("Hubo un error en la consulta", error.message);
+                        return res.status(404).send("Hubo un error en la consulta");
+                    }
+            
+                    res.send("EL usuario fue actualizado con éxito.");
+                }); 
+            }
+            else{
+                res.send('El email ya existe.');
+            }
+        });
+    }
 }
+
 function crearCompras(req,res){
     const productId = req.body.productId;
     const discountType = req.body.discountType;
@@ -177,7 +156,6 @@ function comprasUsuario(req, res){
 
 module.exports = {
     nuevoUsuario: nuevoUsuario,
-    buscarUsuarios: buscarUsuarios,
     usuariosList : usuariosList,
     actualizarUsuario,
     crearCompras,
