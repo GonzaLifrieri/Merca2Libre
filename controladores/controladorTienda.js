@@ -1,6 +1,6 @@
 const con = require('../connection');
 
-function crear(req, res){
+function crearTienda(req, res){
     //Obtiene los datos del metodo POST dentro del objeto 'body'
     let idUsuario = req.body.idUsuario;
     let name = req.body.tiendaNombre;
@@ -24,7 +24,7 @@ function crear(req, res){
     });
 }
 
-function editar(req, res){
+function editarTienda(req, res){
     let idTienda = req.params.id;
     let nuevoNombre = req.body.nuevoNombre;
 
@@ -49,6 +49,6 @@ function editar(req, res){
 
 
 module.exports = {
-    crear: crear,
-    editar: editar,
+    crearTienda: crearTienda,
+    editarTienda: editarTienda,
 }
