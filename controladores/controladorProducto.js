@@ -1,33 +1,30 @@
 const con = require('../connection');
 
-// localhost:8080//tienda/nuevoProducto?tienda_id=Pedro&email=pedro@gmail.com
+// localhost:8080//tienda/nuevoProducto?descripcion=mesa&precio=50&stock=30&categoria_id=1&tienda_id=1
 
 function crearProducto(req, res){
     //Obtiene los datos del metodo POST dentro del objeto 'body'
-    let tienda_id = req.body.tienda_id;
-    let descripcion = req.body.descripcion;
-    let precio = req.body.precio;
+    let descripcion = req.body.description;
+    let price = req.body.price;
     let stock = req.body.stock;
-    let categoria = req.body.categoria;
+    let categoria_id = req.body.categoria_id;
+    let tienda_id = req.body.tienda_id;
 
 
-    let stmt = `INSERT INTO producto (tienda_id, description, price, stock, categoria) VALUES ("${tienda_id}", "${descripcion}", "${precio}", "${stock}", "${categoria}")`;
+    let stmt = `INSERT INTO producto (description, price, stock, categoria_id, tienda_id) VALUES ("${descripcion}", "${price}", "${stock}", "${categoria_id}", "${tienda_id}")`;
     con.query(stmt, function(error, result){
         if (error) {
             console.log('Error al crear nueva tienda. ' + error);
             res.status(400).send('Ocurrió un error al intentar crear el producto. Por favor inténtelo más tarde');
         }
-        con.query(stmt, function(error, result){
-            if(error){
-                console.log('Error al crear nueva tienda. ' + error);
-                res.status(400).send('Ocurrió un error al intentar crear la tienda. Por favor inténtelo más tarde'); 
-            };
-            respuesta = {
-                producto : result[0]
-            }
-            res.json(respuesta);
-        });
+
+        var respuesta = {
+            'producto': result
+        };
+
+        res.json(respuesta);
     });
+    
 }
 
 
@@ -75,5 +72,5 @@ function actualizarProducto (req, res){
 
 module.exports = {
     crearProducto: crearProducto,
-    actualizarProducto
+    actualizarProducto: actualizarProducto
 }
