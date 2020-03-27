@@ -30,6 +30,8 @@ app.get('/tienda/crear', controladorTienda.crear);
 
 app.get('/tienda/:id/editar', controladorTienda.editar);
 
+app.put('/compra/crear', controladorUsuario.crearCompras);
+
 app.post('/tienda/nuevoProducto', controladorProducto.crearProducto);
 
 app.put('/producto/:id/actualizar', controladorProducto.actualizarProducto);

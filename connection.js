@@ -6,7 +6,8 @@ var connection = mysql.createConnection({
     port: node_env.database.DATABASE_PORT,
     user: node_env.database.DATABASE_USER,
     password: node_env.database.DATABASE_PASSWORD,
-    database : 'e_comerce'
+    database : 'e_comerce',
+    multipleStatements : true
 });
 
 module.exports = connection;

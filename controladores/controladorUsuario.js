@@ -137,6 +137,28 @@ function actualizarUsuario(req,res){
 
     })
 }
+function crearCompras(req,res){
+    const productId = req.body.productId;
+    const discountType = req.body.discountType;
+    const quantity = req.body.quantity;
+    const total_price = req.body.total_price;
+    const user_id = req.body.user_id;
+    var sql = "INSERT INTO compra (total_price, user_id) VALUES (" + total_price +"," + user_id + ");SELECT @purchase_id := MAX(id) FROM compra;INSERT INTO producto_x_compra (product_id, purchase_id, discount_type, quantity) VALUES ("+ productId +",@purchase_id," + discountType +", " + quantity +")";
+    
+        con.query(sql,function(err,result,fields){
+                if(err){
+                    console.log(sql ,err);
+                    console.log("Hubo un error en crearCompra");
+                    return res.status(404).send("Hubo un error al intentar crear Compra");
+                }
+            
+                let response = "Se ha creado la compra";
+                res.json({response});
+        })
+        
+}
+
+
 
 function comprasUsuario(req, res){
     const id = req.params.id;
@@ -158,6 +180,7 @@ module.exports = {
     buscarUsuarios: buscarUsuarios,
     usuariosList : usuariosList,
     actualizarUsuario,
+    crearCompras,
     tiendasList,
-    comprasUsuario,
+    comprasUsuario
 }
