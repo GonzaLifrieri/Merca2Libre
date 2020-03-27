@@ -26,6 +26,7 @@ app.get('/tienda/crear', controladorTienda.crear);
 
 app.get('/tienda/:id/editar', controladorTienda.editar);
 
+app.put('/compra/crear', controladorUsuario.crearCompras);
 
 //seteamos el puerto en el cual va a escuchar los pedidos la aplicación
 var puerto = '8080';
