@@ -4,6 +4,8 @@ const controladorProducto = require('../controladores/controladorProducto');
 
 function agregarEndpoints(app){
 
+  app.get('/login', controladorUsuario.login);
+
   app.post('/usuario/crear', controladorUsuario.nuevoUsuario);
 
   app.get('/usuario/:id/tiendas', controladorUsuario.tiendasList);
