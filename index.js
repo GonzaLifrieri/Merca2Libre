@@ -4,6 +4,5 @@ const app = configuracion.crearServidor();
 
 var puerto = '8080';
 
-app.listen(puerto, function () {
-  console.log( "Escuchando en el puerto " + puerto );
-});
+console.log( "Escuchando en el puerto " + puerto );
+app.listen(puerto, "0.0.0.0");
