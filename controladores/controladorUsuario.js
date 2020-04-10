@@ -1,17 +1,53 @@
 var con = require('../connection');
+var bcrypt = require('bcrypt');
 
-// localhost:8080/usuario/crear?nombre=Pedro&email=pedro@gmail.com
+
+function login(req, res){
+    var email = req.body.email;
+    var pass = req.body.password;
+
+    obtenerUsuario(email, (unUsuario) => {
+        if(!unUsuario){
+            res.status(400).send('El email es inexistente');
+            return;
+        }
+        
+        // Load hash from your password DB.
+        bcrypt.compareSync(pass, unUsuario.password); // true
+        const hash = bcrypt.hashSync(pass, unUsuario.salt);
+
+        if(hash == unUsuario.password){
+
+            var infoUsuario = {
+                "id": unUsuario.id,
+                "nombre": unUsuario.name,
+                "email": unUsuario.email
+            }
+
+            res.json(infoUsuario);
+        }
+
+    });
+
+}
 
 // Alta de Usuario
 function nuevoUsuario(req, res){
     var sql = '';
     var nombre = req.body.nombre;
     var email = req.body.email;
+    var password = req.body.password;
 
     checkEmail(email, null, (esvalidoEmail) => {
 
         if(esvalidoEmail){
-            sql = "insert usuario (name, email) values ('" + nombre + "','" + email + "')";
+
+            const saltRounds = 10;
+
+            const salt = bcrypt.genSaltSync(saltRounds);
+            const hash = bcrypt.hashSync(password, salt);
+
+            sql = "insert usuario (name, email, password, salt) values ('" + nombre + "','" + email + "','" + hash + "','" + salt +"')";
         
             con.query(sql, function(error, resultado, fields){
                 if(error){
@@ -27,12 +63,25 @@ function nuevoUsuario(req, res){
             }); 
         }
         else{
-            res.send('El email ya existe');
+            res.status(400).send('El email ya existe');
         }
     });
     
     // checkEmail(Email, Callback)
     // checkEmail(‘email@mail.com’, ()=>{})
+}
+
+function obtenerUsuario(email, callback){
+    const sqlEmail = "SELECT * FROM usuario WHERE email=" + "\""+email+ "\"";
+
+    con.query(sqlEmail, function (err, result, fields) {
+       if (err){
+         console.log("Hubo un error en obtener email");
+         return res.status(400).send("Hubo un error en la obtencion del email");
+       }
+
+       return callback(result.length == 1 ? result : null);
+   })
 }
 
 
@@ -52,6 +101,7 @@ function checkEmail(email, id, callback){
 
 // List usuarios
 function usuariosList (req, res){
+    console.log('usuarios list')
     let stmt = `SELECT id, name, email FROM usuario`;
     con.query(stmt, function(error, result){
         if(error){
@@ -160,5 +210,6 @@ module.exports = {
     actualizarUsuario,
     crearCompras,
     tiendasList,
-    comprasUsuario
+    comprasUsuario,
+    login
 }
